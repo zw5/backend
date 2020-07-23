@@ -89,8 +89,9 @@ app.post("/api/register", async (req, res) => {
     */
    
     var id = crypto.randomBytes(16).toString('hex')
-
-    var user = new User({id: id,displayName: req.body.username, email: req.body.email, password: bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10))})
+    bcrypt.hash(req.body.password, 10, function(err, hash) {
+        var user = new User({id: id,displayName: req.body.username, email: req.body.email, password: hash})
+    });
     user.save()
     var friends = new Friends({id: id})
     friends.save()
